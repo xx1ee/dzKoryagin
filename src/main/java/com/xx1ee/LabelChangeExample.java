@@ -17,7 +17,7 @@ public class LabelChangeExample extends JFrame {
 
         label = new JLabel("Введите слово на немецком");
         label.setFont(new Font("Arial", Font.PLAIN, 30));
-        jTextField.setColumns(15);
+        jTextField.setColumns(25);
         jTextField.setFont(new Font("Arial", Font.PLAIN, 30));
         add(label);
         add(jTextField);

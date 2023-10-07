@@ -1,8 +1,6 @@
 package com.xx1ee;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GermanConverter {
     private final Map<String, String> edinitsy = new HashMap<>();
@@ -44,93 +42,115 @@ public class GermanConverter {
     }
     public String convert() throws InterruptedException {
         var numbersString = vvodNumber.replaceAll("\\s+", "");
-        var numbersArray = vvodNumber.replaceAll("\\s+", "").toCharArray();
-        if (!numbersString.contains("hundert") && !numbersString.contains("und")) {
-            return vvodIsEdinitsyDesyatkiOrElevenNinenteen(numbersString);
-        } else {
-            if (numbersString.contains("und") && !numbersString.contains("hundert")) {
-                return vvodIsSostavnoeDesyatichnoye(numbersArray, numbersString);
+        var numbersArray = vvodNumber.split("\\s+");
+        if (numbersArray.length == 1) {
+            if (edinitsy.containsKey(numbersString)) {
+                return edinitsy.get(numbersString);
             } else {
-                if (numbersString.contains("hundert")) {
-                    return vvodIsSotni(numbersArray, numbersString);
+                if (elevenNineteen.containsKey(numbersString)) {
+                    return elevenNineteen.get(numbersString);
+                } else {
+                    return desyatki.getOrDefault(numbersString, "Нет такого числа " + numbersString);
                 }
             }
-        }
-        return "Нет такого числа";
-    }
-    private String vvodIsEdinitsyDesyatkiOrElevenNinenteen(String numbersString) {
-        if (edinitsy.containsKey(numbersString)) {
-            return edinitsy.get(numbersString);
         } else {
-            if (desyatki.containsKey(numbersString)) {
-                return desyatki.get(numbersString);
-            } else {
-                return elevenNineteen.getOrDefault(numbersString, "Нет такого числа");
-            }
-        }
-    }
-    private String vvodIsSostavnoeDesyatichnoye(char[] numbersArray, String numbersString) {
-        int i = 0;
-        String slovo = "";
-        while (!slovo.contains("und")) {
-            slovo+=numbersArray[i];
-            i++;
-        }
-        if (edinitsy.containsKey(slovo.replace("und", ""))) {
-            if (desyatki.containsKey(numbersString.replace(slovo, ""))) {
-                return desyatki.get(numbersString.replace(slovo, "")).replace("0", "") + edinitsy.get(slovo.replace("und", ""));
-            }
-        }
-        return "Нет такого числа";
-    }
-    private String vvodIsSotni(char[] numbersArray, String numbersString) {
-        if (edinitsy.containsKey(numbersString.replace("hundert", ""))) {
-            return edinitsy.get(numbersString.replace("hundert", "")) + "00";
-        } else {
-            return vvodIsSotniSostavnoye(numbersArray, numbersString);
-        }
-    }
-    private String vvodIsSotniSostavnoye(char[] numbersArray, String numbersString) {
-        String slovo = "";
-        int i = 0;
-        while (!slovo.contains("hundert")) {
-            slovo += numbersArray[i];
-            i++;
-        }
-        if (edinitsy.containsKey(slovo.replace("hundert", ""))) {
-            if (edinitsy.containsKey(numbersString.replace(slovo, ""))) {
-                return edinitsy.get(slovo.replace("hundert", "")) + "0" +
-                        edinitsy.get(numbersString.replace(slovo, ""));
-            }
-            if (elevenNineteen.containsKey(numbersString.replace(slovo, ""))) {
-                return edinitsy.get(slovo.replace("hundert", "")) + elevenNineteen.get(numbersString.replace(slovo, ""));
-            } else {
-                if (desyatki.containsKey(numbersString.replace(slovo, ""))) {
-                    return edinitsy.get(slovo.replace("hundert", "")) + desyatki.get(numbersString.replace(slovo, ""));
+            if (numbersArray.length == 2) {
+                List<String> oshibki = new ArrayList<>();
+                if (!edinitsy.containsKey(numbersArray[0])) {
+                    oshibki.add(numbersArray[0]);
+                }
+                if (!numbersArray[1].equals("hundert")) {
+                    oshibki.add(numbersArray[1]);
+                }
+                if (oshibki.isEmpty()) {
+                    return edinitsy.get(numbersArray[0]) + "00";
                 } else {
-                    if (numbersString.replace(slovo, "").contains("und")) {
-                        return vvodIsSotniDesyatkiEdinitsy(numbersString, slovo);
+                    if (oshibki.size() == 1) {
+                        return "Нет такого слова " + oshibki.get(0);
+                    } else {
+                        return "Нет таких слов " + oshibki.get(0) + " " + oshibki.get(1);
+                    }
+                }
+            } else {
+                if (numbersArray.length == 3) {
+                    if (desyatki.containsKey(numbersArray[2]) && edinitsy.containsKey(numbersArray[0])
+                    && numbersArray[1].equals("und")) {
+                        return desyatki.get(numbersArray[2]).replace("0", "") + edinitsy.get(numbersArray[0]);
+                    } else {
+                        if (edinitsy.containsKey(numbersArray[2]) && edinitsy.containsKey(numbersArray[0])
+                                && numbersArray[1].equals("hundert")) {
+                            return edinitsy.get(numbersArray[0]) + "0" + edinitsy.get(numbersArray[2]);
+                        } else {
+                            if (elevenNineteen.containsKey(numbersArray[2]) && edinitsy.containsKey(numbersArray[0])
+                                    && numbersArray[1].equals("hundert")) {
+                                return edinitsy.get(numbersArray[0]) + elevenNineteen.get(numbersArray[2]);
+                            } else {
+                                List<String> oshibki = new ArrayList<>();
+                                if (!edinitsy.containsKey(numbersArray[0])) {
+                                    oshibki.add(numbersArray[0]);
+                                }
+                                if (!numbersArray[1].equals("hundert") && !numbersArray[1].equals("und")) {
+                                    oshibki.add(numbersArray[1]);
+                                }
+                                if (!desyatki.containsKey(numbersArray[2]) && !edinitsy.containsKey(numbersArray[2]) &&
+                                !elevenNineteen.containsKey(numbersArray[2])) {
+                                    oshibki.add(numbersArray[2]);
+                                }
+                                if (!oshibki.isEmpty()) {
+                                    if (oshibki.size() == 1) {
+                                        return "Нет такого слова " + oshibki.get(0);
+                                    } else {
+                                        String o = "Нет таких слов ";
+                                        for (String s : oshibki) {
+                                            o+=s;
+                                            o+=" ";
+                                        }
+                                        return o;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (numbersArray.length == 5) {
+                        if (numbersArray[1].equals("hundert") && numbersArray[3].equals("und")
+                        && edinitsy.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[2]) && desyatki.containsKey(numbersArray[4])) {
+                            return edinitsy.get(numbersArray[0]) + desyatki.get(numbersArray[4]).replace("0", "") + edinitsy.get(numbersArray[2]);
+                        } else {
+                            List<String> oshibki = new ArrayList<>();
+                            if (!numbersArray[1].equals("hundert")) {
+                                oshibki.add(numbersArray[1]);
+                            }
+                            if (!numbersArray[3].equals("und")) {
+                                oshibki.add(numbersArray[3]);
+                            }
+                            if (!edinitsy.containsKey(numbersArray[0])) {
+                                oshibki.add(numbersArray[0]);
+                            }
+                            if (!edinitsy.containsKey(numbersArray[2])) {
+                                oshibki.add(numbersArray[2]);
+                            }
+                            if (!desyatki.containsKey(numbersArray[4])) {
+                                oshibki.add(numbersArray[4]);
+                            }
+                            if (!oshibki.isEmpty()) {
+                                if (oshibki.size() == 1) {
+                                    return "Нет такого слова " + oshibki.get(0);
+                                } else {
+                                    String o = "Нет таких слов ";
+                                    for (String s : oshibki) {
+                                        o+=s;
+                                        o+=" ";
+                                    }
+                                    return o;
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-        return "Нет такого числа";
-    }
-    private String vvodIsSotniDesyatkiEdinitsy(String numbersString, String slovo) {
-        var wordWithoutSotni = numbersString.replace(slovo, "").toCharArray();
-        String edinitsWord = "";
-        int i = 0;
-        while (!edinitsWord.contains("und")) {
-            edinitsWord += wordWithoutSotni[i];
-            i++;
-        }
-        if (edinitsy.containsKey(edinitsWord.replace("und", "")) &&
-                desyatki.containsKey(numbersString.replace(slovo, "").replace(edinitsWord, ""))) {
-            return edinitsy.get(slovo.replace("hundert", "")) +
-                    desyatki.get(numbersString.replace(slovo, "").replace(edinitsWord, "")).replace("0", "") +
-                    edinitsy.get(edinitsWord.replace("und", ""));
-        }
-        return "Нет такого числа";
+        return "";
     }
 
 }
