@@ -131,11 +131,11 @@ public class GermanConverter {
                         } else {
                             if (edinitsy.containsKey(numbersArray[0]) && numbersArray[1].equals("hundert") && desyatki.containsKey(numbersArray[2])
                             && edinitsy.containsKey(numbersArray[3]) && numbersArray[4].equals("und")) {
-                                return "Нарушен порядок слов: десятки с единицами";
+                                return "Нарушен порядок слов: десятки на месте единиц";
                             }
-                            if (numbersArray[4].equals("hundert") && numbersArray[3].equals("und")
-                                    && edinitsy.containsKey(numbersArray[3]) && edinitsy.containsKey(numbersArray[2]) && desyatki.containsKey(numbersArray[0])) {
-                                return "Нарушен порядок слов: сотни с единицами";
+                            if (numbersArray[4].equals("hundert") && numbersArray[1].equals("und")
+                                    && edinitsy.containsKey(numbersArray[3]) && edinitsy.containsKey(numbersArray[0]) && desyatki.containsKey(numbersArray[2])) {
+                                return "Нарушен порядок слов: сотни на месте единиц";
                             }
                             if (desyatki.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[1]) &&
                             numbersArray[2].equals("und") && edinitsy.containsKey(numbersArray[3]) && numbersArray[4].equals("hundert")) {
@@ -145,6 +145,11 @@ public class GermanConverter {
                                     && edinitsy.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[2]) && desyatki.containsKey(numbersArray[4])) {
                                 return "Нарушен порядок слов: единицы на месте сотен, сотни на месте десяток, десятки на месте единиц";
                             }
+                            if (numbersArray[2].equals("hundert") && numbersArray[4].equals("und")
+                                    && edinitsy.containsKey(numbersArray[1]) && edinitsy.containsKey(numbersArray[3]) && desyatki.containsKey(numbersArray[0])) {
+                                return "Нарушен порядок слов: десятки на месте сотен";
+                            }
+                            //zwei hundert neun und dreibig
                             List<String> oshibki = new ArrayList<>();
                             if (!numbersArray[1].equals("hundert")) {
                                 oshibki.add(numbersArray[1]);
