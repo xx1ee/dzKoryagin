@@ -42,7 +42,7 @@ public class GermanConverter {
     }
     public String convert() throws InterruptedException {
         var numbersString = vvodNumber.replaceAll("\\s+", "");
-        var numbersArray = vvodNumber.split("\\s+");
+        var numbersArray = vvodNumber.trim().split("\\s+");
         if (numbersArray.length == 1) {
             if (edinitsy.containsKey(numbersString)) {
                 return edinitsy.get(numbersString);
@@ -86,6 +86,18 @@ public class GermanConverter {
                                 return edinitsy.get(numbersArray[0]) + elevenNineteen.get(numbersArray[2]);
                             } else {
                                 List<String> oshibki = new ArrayList<>();
+                                if (desyatki.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[1])
+                                && numbersArray[2].equals("und")) {
+                                    return "Нарушен порядок слов: десятки с единицами";
+                                }
+                                if (edinitsy.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[1])
+                                && numbersArray[2].equals("hundert")) {
+                                    return "Нарушен порядок слов: сотни с единицами";
+                                }
+                                if (elevenNineteen.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[1])
+                                && numbersArray[2].equals("hundert")) {
+                                    return "Нарушен порядок слов: сотни с 11-19";
+                                }
                                 if (!edinitsy.containsKey(numbersArray[0])) {
                                     oshibki.add(numbersArray[0]);
                                 }
@@ -117,6 +129,7 @@ public class GermanConverter {
                         && edinitsy.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[2]) && desyatki.containsKey(numbersArray[4])) {
                             return edinitsy.get(numbersArray[0]) + desyatki.get(numbersArray[4]).replace("0", "") + edinitsy.get(numbersArray[2]);
                         } else {
+
                             List<String> oshibki = new ArrayList<>();
                             if (!numbersArray[1].equals("hundert")) {
                                 oshibki.add(numbersArray[1]);
