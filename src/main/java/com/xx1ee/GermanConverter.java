@@ -129,7 +129,22 @@ public class GermanConverter {
                         && edinitsy.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[2]) && desyatki.containsKey(numbersArray[4])) {
                             return edinitsy.get(numbersArray[0]) + desyatki.get(numbersArray[4]).replace("0", "") + edinitsy.get(numbersArray[2]);
                         } else {
-
+                            if (edinitsy.containsKey(numbersArray[0]) && numbersArray[1].equals("hundert") && desyatki.containsKey(numbersArray[2])
+                            && edinitsy.containsKey(numbersArray[3]) && numbersArray[4].equals("und")) {
+                                return "Нарушен порядок слов: десятки с единицами";
+                            }
+                            if (numbersArray[4].equals("hundert") && numbersArray[3].equals("und")
+                                    && edinitsy.containsKey(numbersArray[3]) && edinitsy.containsKey(numbersArray[2]) && desyatki.containsKey(numbersArray[0])) {
+                                return "Нарушен порядок слов: сотни с единицами";
+                            }
+                            if (desyatki.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[1]) &&
+                            numbersArray[2].equals("und") && edinitsy.containsKey(numbersArray[3]) && numbersArray[4].equals("hundert")) {
+                                return "Нарушен порядок слов: сотни на месте единиц, единицы на месте десяток, десятки на месте сотен";
+                            }
+                            if (numbersArray[3].equals("hundert") && numbersArray[1].equals("und")
+                                    && edinitsy.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[2]) && desyatki.containsKey(numbersArray[4])) {
+                                return "Нарушен порядок слов: единицы на месте сотен, сотни на месте десяток, десятки на месте единиц";
+                            }
                             List<String> oshibki = new ArrayList<>();
                             if (!numbersArray[1].equals("hundert")) {
                                 oshibki.add(numbersArray[1]);
