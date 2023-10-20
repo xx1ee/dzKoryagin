@@ -50,11 +50,23 @@ public class GermanConverter {
                 if (elevenNineteen.containsKey(numbersString)) {
                     return elevenNineteen.get(numbersString);
                 } else {
+                    if (numbersString.equals("hundert")) {
+                        return "hundert не может идти первым";
+                    }
+                    if (numbersString.equals("und")) {
+                        return "und не может идти первым";
+                    }
                     return desyatki.getOrDefault(numbersString, "Нет такого числа " + numbersString);
                 }
             }
         } else {
             if (numbersArray.length == 2) {
+                if (edinitsy.containsKey(numbersArray[0]) && numbersArray[1].equals("und")) {
+                    return "После " + numbersArray[0] + " не должно идти und";
+                }
+                if (edinitsy.containsKey(numbersArray[1]) && (numbersArray[0].equals("und") || numbersArray[0].equals("hundert"))) {
+                    return "Перед " + numbersArray[1] + " не должно идти " + numbersArray[0];
+                }
                 List<String> oshibki = new ArrayList<>();
                 if (!edinitsy.containsKey(numbersArray[0])) {
                     oshibki.add(numbersArray[0]);
@@ -124,6 +136,12 @@ public class GermanConverter {
                         }
                     }
                 } else {
+                    if (numbersArray.length == 4) {
+                        if (edinitsy.containsKey(numbersArray[0]) && numbersArray[1].equals("hundert") &&
+                                edinitsy.containsKey(numbersArray[2])) {
+                            return "После "+ numbersArray[2] + " идет "+ numbersArray[3] +". Не должно ничего идти";
+                        }
+                    } else
                     if (numbersArray.length == 5) {
                         if (numbersArray[1].equals("hundert") && numbersArray[3].equals("und")
                         && edinitsy.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[2]) && desyatki.containsKey(numbersArray[4])) {
@@ -131,25 +149,25 @@ public class GermanConverter {
                         } else {
                             if (edinitsy.containsKey(numbersArray[0]) && numbersArray[1].equals("hundert") && desyatki.containsKey(numbersArray[2])
                             && edinitsy.containsKey(numbersArray[3]) && numbersArray[4].equals("und")) {
-                                return "Нарушен порядок слов: десятки на месте единиц";
+                                return "Нарушен порядок слов: десятки на месте единиц, единицы на месте десяток";
                             }
                             if (numbersArray[4].equals("hundert") && numbersArray[1].equals("und")
                                     && edinitsy.containsKey(numbersArray[3]) && edinitsy.containsKey(numbersArray[0]) && desyatki.containsKey(numbersArray[2])) {
-                                return "Нарушен порядок слов: сотни на месте единиц";
+                                return "Нарушен порядок слов: сотни на месте десяток";
                             }
                             if (desyatki.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[1]) &&
                             numbersArray[2].equals("und") && edinitsy.containsKey(numbersArray[3]) && numbersArray[4].equals("hundert")) {
-                                return "Нарушен порядок слов: сотни на месте единиц, единицы на месте десяток, десятки на месте сотен";
+                                return "Нарушен порядок слов: сотни на месте десяток, десятки на месте сотен";
                             }
                             if (numbersArray[3].equals("hundert") && numbersArray[1].equals("und")
                                     && edinitsy.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[2]) && desyatki.containsKey(numbersArray[4])) {
-                                return "Нарушен порядок слов: единицы на месте сотен, сотни на месте десяток, десятки на месте единиц";
+                                return "Нарушен порядок слов: единицы на месте сотен, сотни на месте единиц";
                             }
                             if (numbersArray[2].equals("hundert") && numbersArray[4].equals("und")
                                     && edinitsy.containsKey(numbersArray[1]) && edinitsy.containsKey(numbersArray[3]) && desyatki.containsKey(numbersArray[0])) {
                                 return "Нарушен порядок слов: десятки на месте сотен";
                             }
-                            //zwei hundert neun und dreibig
+                            //zwei hundert neun und dreibig (сотни единицы десятки)
                             List<String> oshibki = new ArrayList<>();
                             if (!numbersArray[1].equals("hundert")) {
                                 oshibki.add(numbersArray[1]);
@@ -178,6 +196,17 @@ public class GermanConverter {
                                     return o;
                                 }
                             }
+                        }
+                    } else {
+                        if (numbersArray.length > 5) {
+                            if (numbersArray[0].equals("hundert")) {
+                                return "Hundert не может идти первым";
+                            }
+                            if (numbersArray[1].equals("hundert") && numbersArray[2].equals("und")
+                                    && edinitsy.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[3])) {
+                                return "После hundert не может идти Und";
+                            }
+                            return "После " + numbersArray[4]+ " не должно ничего идти";
                         }
                     }
                 }
