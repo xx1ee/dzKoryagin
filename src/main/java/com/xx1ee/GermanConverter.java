@@ -172,8 +172,16 @@ public class GermanConverter {
                             return "После Und не могут идти сотни";
                         }
                         if (edinitsy.containsKey(numbersArray[0]) && numbersArray[1].equals("hundert") &&
-                                edinitsy.containsKey(numbersArray[2])) {
-                            return "После " + numbersArray[3] +" должны идти десятки ";
+                                edinitsy.containsKey(numbersArray[2]) && numbersArray[3].equals("hundert")) {
+                            return "После сотен не могут идти сотни ";
+                        }
+                        if (edinitsy.containsKey(numbersArray[0]) && numbersArray[1].equals("hundert") &&
+                                edinitsy.containsKey(numbersArray[2]) && edinitsy.containsKey(numbersArray[3])) {
+                            return "После единиц не могут идти единицы ";
+                        }
+                        if (edinitsy.containsKey(numbersArray[0]) && numbersArray[1].equals("hundert") &&
+                                edinitsy.containsKey(numbersArray[2]) && numbersArray[3].equals("und")) {
+                            return "После und должны идти десятки ";
                         }
                         if (edinitsy.containsKey(numbersArray[0]) && numbersArray[1].equals("hundert") && desyatki.containsKey(numbersArray[2])) {
                             return "После " + numbersArray[2] + " не может ничего идти";
