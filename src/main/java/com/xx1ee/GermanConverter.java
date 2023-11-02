@@ -91,6 +91,14 @@ public class GermanConverter {
                 }
             } else {
                 if (numbersArray.length == 3) {
+                    if (numbersArray[1].equals("hundert") && numbersArray[2].equals("und")
+                            && edinitsy.containsKey(numbersArray[0]) ) {
+                        return "После hundert не может идти Und";
+                    }
+                    if (numbersArray[2].equals("hundert") && numbersArray[1].equals("und")
+                            && edinitsy.containsKey(numbersArray[0])) {
+                        return "После Und не могут идти сотни";
+                    }
                     if (desyatki.containsKey(numbersArray[2]) && edinitsy.containsKey(numbersArray[0])
                     && numbersArray[1].equals("und")) {
                         return desyatki.get(numbersArray[2]).replace("0", "") + edinitsy.get(numbersArray[0]);
@@ -98,6 +106,7 @@ public class GermanConverter {
                         if (numbersArray[0].equals("hundert")) {
                             return "Hundert не может идти первым";
                         }
+
                         if (edinitsy.containsKey(numbersArray[2]) && edinitsy.containsKey(numbersArray[0])
                                 && numbersArray[1].equals("hundert")) {
                             return edinitsy.get(numbersArray[0]) + "0" + edinitsy.get(numbersArray[2]);
@@ -164,7 +173,7 @@ public class GermanConverter {
                         }
                         if (edinitsy.containsKey(numbersArray[0]) && numbersArray[1].equals("hundert") &&
                                 edinitsy.containsKey(numbersArray[2])) {
-                            return "После "+ numbersArray[2] + " идет "+ numbersArray[3] +". Не должно ничего идти";
+                            return "После " + numbersArray[3] +" должны идти десятки ";
                         }
                         if (edinitsy.containsKey(numbersArray[0]) && numbersArray[1].equals("hundert") && desyatki.containsKey(numbersArray[2])) {
                             return "После " + numbersArray[2] + " не может ничего идти";
@@ -177,6 +186,10 @@ public class GermanConverter {
                         } else {
                             if (numbersArray[0].equals("hundert")) {
                                 return "Hundert не может идти первым";
+                            }
+                            if (numbersArray[1].equals("hundert") && numbersArray[3].equals("und")
+                                    && edinitsy.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[2]) && (edinitsy.containsKey(numbersArray[4]) || "hundert".equals(numbersArray[4]))) {
+                                return "После Und должны идти десятки";
                             }
                             if (numbersArray[1].equals("hundert") && numbersArray[2].equals("und")
                                     && edinitsy.containsKey(numbersArray[0]) && edinitsy.containsKey(numbersArray[3])) {
