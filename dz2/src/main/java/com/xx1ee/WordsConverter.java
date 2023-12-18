@@ -16,7 +16,7 @@ public class WordsConverter {
     public String convert() {
         StringBuilder newWords = new StringBuilder();
         String w = "";
-        if (first >= 0 && first < second && first < iter.size() && second >= 0 && second > first && second < iter.size()) {
+        if (first >= 0 && first <= second && first < iter.size() && second >= 0 && second >= first && second < iter.size()) {
             for (int i = 0; i < iter.size(); i++) {
                 if (i >= first && i <= second) {
                     newWords.append(iter.get(i));

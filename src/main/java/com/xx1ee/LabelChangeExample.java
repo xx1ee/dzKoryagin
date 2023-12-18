@@ -9,7 +9,7 @@ public class LabelChangeExample extends JFrame {
     private JLabel label;
     private JLabel label1 = new JLabel();
     private JTextField jTextField = new JTextField();
-    private GermanConverter germanConverter;
+    private GermanConverter2 germanConverter;
 
     public LabelChangeExample() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,12 +27,8 @@ public class LabelChangeExample extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                germanConverter = new GermanConverter(jTextField.getText());
-                try {
-                    label1.setText(germanConverter.convert());
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
+                germanConverter = new GermanConverter2(jTextField.getText());
+                label1.setText(germanConverter.ApplyButton_Click());
             }
         });
         add(button);
